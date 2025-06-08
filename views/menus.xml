@@ -1,0 +1,15 @@
+<odoo>
+    <!-- Top-Level Menu -->
+<menuitem id="menu_hospital_root"
+          name="Hospital"
+          web_icon="aio_hms,static/src/img/icon.png"
+          sequence="10"/>
+
+
+<!-- Submenu -->
+<menuitem id="menu_hospital_patient"
+          name="Patients"
+          parent="menu_hospital_root"
+          action="action_hospital_patient"
+          sequence="10"/>
+</odoo>
