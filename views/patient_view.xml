@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Tree View -->
-    <record id="view_hospital_patient_tree" model="ir.ui.view">
-        <field name="name">hospital.patient.tree</field>
+    <!-- list View -->
+    <record id="view_hospital_patient_list" model="ir.ui.view">
+        <field name="name">hospital.patient.list</field>
         <field name="model">hospital.patient</field>
         <field name="arch" type="xml">
-            <tree decoration-success="state=='discharged'"
+            <list decoration-success="state=='discharged'"
                   decoration-info="state=='confirmed'"
                   decoration-warning="state=='in_treatment'"
                   decoration-danger="state=='cancelled'">
@@ -19,7 +19,7 @@
                 <field name="priority" widget="priority"/>
                 <field name="total_visits"/>
                 <field name="due_amount"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -29,33 +29,29 @@
         <field name="model">hospital.patient</field>
         <field name="arch" type="xml">
             <form>
-                <!-- Header with Status Bar -->
                 <header>
                     <button name="action_confirm" type="object" string="Confirm"
-                            class="oe_highlight" invisible="state != 'draft'"/>
+                        class="oe_highlight"
+                        states="draft"/>
                     <button name="action_start_treatment" type="object" string="Start Treatment"
-                            class="oe_highlight" invisible="state != 'confirmed'"/>
+                        class="oe_highlight"
+                        states="confirmed"/>
                     <button name="action_complete_treatment" type="object" string="Complete Treatment"
-                            class="oe_highlight" invisible="state != 'in_treatment'"/>
+                        class="oe_highlight"
+                        states="in_treatment"/>
                     <button name="action_discharge" type="object" string="Discharge"
-                            class="oe_highlight" invisible="state != 'treated'"/>
+                        class="oe_highlight"
+                        states="treated"/>
                     <button name="action_cancel" type="object" string="Cancel"
-                            invisible="state not in ('draft', 'confirmed')"/>
+                        states="draft,confirmed"/>
                     <button name="action_reset_to_draft" type="object" string="Reset to Draft"
-                            invisible="state != 'cancelled'"/>
-
-                    <!-- Action Buttons -->
-                    <button name="action_schedule_appointment" type="object" string="Schedule Appointment"
-                            class="btn-secondary"/>
-                    <button name="action_view_medical_history" type="object" string="Medical History"
-                            class="btn-secondary"/>
-
-                    <!-- Status Bar -->
-                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,in_treatment,treated,discharged"/>
+                        states="cancelled"/>
+                    <button name="action_schedule_appointment" type="object" string="Schedule Appointment"/>
+                    <button name="action_view_medical_history" type="object" string="Medical History"/>
+                    <field name="state" widget="statusbar"
+                        statusbar_visible="draft,confirmed,in_treatment,treated,discharged"/>
                 </header>
-
                 <sheet>
-                    <!-- Title and Priority -->
                     <div class="oe_title">
                         <h1>
                             <field name="patient_id" readonly="1"/>
@@ -64,23 +60,20 @@
                             <field name="name" placeholder="Patient Full Name..."/>
                         </h2>
                     </div>
-
-                    <!-- Priority and Active Status -->
-<group string="Status And Priority">
-    <field name="active" string="Active" widget="boolean_toggle"/>
-    <field name="priority" string="Priority" widget="priority"/>
-</group>
-
+                    <group>
+                        <group>
+                            <field name="active" widget="boolean_toggle"/>
+                            <field name="priority" widget="priority"/>
+                        </group>
+                    </group>
                     <group>
                         <group string="Personal Information">
-                            <field name="name"/>
                             <field name="id_no"/>
                             <field name="date_of_birth"/>
                             <field name="age"/>
                             <field name="gender"/>
                             <field name="blood_group"/>
                         </group>
-
                         <group string="Contact Information">
                             <field name="phone"/>
                             <field name="mobile"/>
@@ -88,55 +81,42 @@
                             <field name="address"/>
                         </group>
                     </group>
-
                     <group>
                         <group string="Medical Information">
                             <field name="allergies"/>
                             <field name="medical_history"/>
                             <field name="assigned_doctor"/>
                         </group>
-
                         <group string="Emergency Contact">
                             <field name="emergency_contact"/>
                             <field name="emergency_phone"/>
                         </group>
                     </group>
-
                     <group>
                         <group string="Visit Information">
                             <field name="first_visit_datetime"/>
                             <field name="last_visit_date"/>
                             <field name="total_visits"/>
                         </group>
-
                         <group string="Financial Information">
                             <field name="total_amount" widget="monetary"/>
                             <field name="paid_amount" widget="monetary"/>
                             <field name="due_amount" widget="monetary"/>
                         </group>
                     </group>
-
                     <notebook>
                         <page string="Additional Notes">
                             <field name="notes" placeholder="Enter any additional notes about the patient..."/>
                         </page>
-
                         <page string="Medical History">
                             <p>Medical history and treatment records will be displayed here.</p>
                         </page>
-
                         <page string="Appointments">
                             <p>Patient appointments will be displayed here.</p>
                         </page>
                     </notebook>
+                    <field name="message_ids" widget="mail_thread"/>
                 </sheet>
-
-                <!-- Chatter section -->
-                <div class="oe_chatter">
-                    <field name="message_follower_ids"/>
-                    <field name="activity_ids"/>
-                    <field name="message_ids"/>
-                </div>
             </form>
         </field>
     </record>
@@ -176,7 +156,7 @@
     <record id="action_hospital_patient" model="ir.actions.act_window">
         <field name="name">Patients</field>
         <field name="res_model">hospital.patient</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
         <field name="search_view_id" ref="view_hospital_patient_search"/>
         <field name="context">{'search_default_active': 1}</field>
         <field name="help" type="html">
