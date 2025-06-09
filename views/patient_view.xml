@@ -29,27 +29,29 @@
         <field name="model">hospital.patient</field>
         <field name="arch" type="xml">
             <form>
+                <!--        header fixed to v18        -->
                 <header>
                     <button name="action_confirm" type="object" string="Confirm"
-                        class="oe_highlight"
-                        states="draft"/>
+                            class="oe_highlight"
+                            invisible="state != 'draft'"/>
                     <button name="action_start_treatment" type="object" string="Start Treatment"
-                        class="oe_highlight"
-                        states="confirmed"/>
+                            class="oe_highlight"
+                            invisible="state != 'confirmed'"/>
                     <button name="action_complete_treatment" type="object" string="Complete Treatment"
-                        class="oe_highlight"
-                        states="in_treatment"/>
+                            class="oe_highlight"
+                            invisible="state != 'in_treatment'"/>
                     <button name="action_discharge" type="object" string="Discharge"
-                        class="oe_highlight"
-                        states="treated"/>
+                            class="oe_highlight"
+                            invisible="state != 'treated'"/>
                     <button name="action_cancel" type="object" string="Cancel"
-                        states="draft,confirmed"/>
+                            invisible="state not in ('draft', 'confirmed')"/>
                     <button name="action_reset_to_draft" type="object" string="Reset to Draft"
-                        states="cancelled"/>
+                            invisible="state != 'cancelled'"/>
                     <button name="action_schedule_appointment" type="object" string="Schedule Appointment"/>
                     <button name="action_view_medical_history" type="object" string="Medical History"/>
                     <field name="state" widget="statusbar"
-                        statusbar_visible="draft,confirmed,in_treatment,treated,discharged"/>
+                           statusbar_visible="draft,confirmed,in_treatment,treated,discharged"/>
+
                 </header>
                 <sheet>
                     <div class="oe_title">
